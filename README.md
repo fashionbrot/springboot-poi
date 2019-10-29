@@ -4,34 +4,61 @@
 Springboot  poi上传并处理百万级数据 excel 
 
 #### 软件架构
-软件架构说明
+
+springboot poi 上传 excel 高效处理方式
 
 
-#### 安装教程
+```java
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+    @RequestMapping("/test")
+    @ResponseBody
+    public String test(@RequestParam(value = "file",required = false) MultipartFile file){
+        LargeExcelFileReadUtil example = new LargeExcelFileReadUtil();
+        LinkedHashMap<String, String> rowMap=null;
+        try {
+            example.processOneSheet(file.getInputStream());
+            rowMap = example.getRowContents();
+        } catch (Exception e) {
+            log.error("upload readExcel error",e);
+        }
 
-#### 使用说明
+        if (CollectionUtils.isEmpty(rowMap)){
+            throw new RuntimeException("读取："+file.getOriginalFilename()+"失败");
+        }
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+        int count=2;
+        List<TestModel>  testModelList = new ArrayList<>();
+        String column1="";
+        String column2="";
+        for(Map.Entry entry:rowMap.entrySet()){
 
-#### 参与贡献
+            String key= (String) entry.getKey();
+            String value= (String) entry.getValue();
+            if (("A"+count).equals(key)){
+                column1=value;
+            }else if (("B"+count).equals(key)){
+                column2=value;
 
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
+                testModelList.add(TestModel.builder()
+                        .column1(column1)
+                        .column2(column2)
+                        .build());
 
+                count++;
+                column1="";
+                column2="";
+            }
+        }
 
-#### 码云特技
+        log.info(JSON.toJSONString(testModelList));
 
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  码云官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解码云上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是码云最有价值开源项目，是码云综合评定出的优秀开源项目
-5.  码云官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  码云封面人物是一档用来展示码云会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+        return JSON.toJSONString(testModelList);
+    }
+
+```
+
+测试用例
+
+![](document/TIM截图20191028235440.png)
+![](document/test.xlsx)
+
