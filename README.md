@@ -10,7 +10,7 @@ springboot poi 上传 excel 高效处理方式
 
 ```java
 
-    @RequestMapping("/test")
+@RequestMapping("/test")
     @ResponseBody
     public String test(@RequestParam(value = "file",required = false) MultipartFile file){
         LargeExcelFileReadUtil example = new LargeExcelFileReadUtil();
@@ -34,19 +34,28 @@ springboot poi 上传 excel 高效处理方式
 
             String key= (String) entry.getKey();
             String value= (String) entry.getValue();
-            if (("A"+count).equals(key)){
-                column1=value;
-            }else if (("B"+count).equals(key)){
-                column2=value;
 
-                testModelList.add(TestModel.builder()
-                        .column1(column1)
-                        .column2(column2)
-                        .build());
+            char pop =key.substring(0).charAt(0);
+            switch (pop){
+                case 'A':
+                    column1=value;
+                    break;
+                case 'B':
 
-                count++;
-                column1="";
-                column2="";
+                    column2=value;
+
+                    testModelList.add(TestModel.builder()
+                            .column1(column1)
+                            .column2(column2)
+                            .build());
+
+                    count++;
+                    column1="";
+                    column2="";
+
+                    break;
+                    default:
+                        break;
             }
         }
 

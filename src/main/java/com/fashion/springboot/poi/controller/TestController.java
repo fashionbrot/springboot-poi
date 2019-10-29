@@ -46,19 +46,28 @@ public class TestController {
 
             String key= (String) entry.getKey();
             String value= (String) entry.getValue();
-            if (("A"+count).equals(key)){
-                column1=value;
-            }else if (("B"+count).equals(key)){
-                column2=value;
 
-                testModelList.add(TestModel.builder()
-                        .column1(column1)
-                        .column2(column2)
-                        .build());
+            char pop =key.substring(0).charAt(0);
+            switch (pop){
+                case 'A':
+                    column1=value;
+                    break;
+                case 'B':
 
-                count++;
-                column1="";
-                column2="";
+                    column2=value;
+
+                    testModelList.add(TestModel.builder()
+                            .column1(column1)
+                            .column2(column2)
+                            .build());
+
+                    count++;
+                    column1="";
+                    column2="";
+
+                    break;
+                    default:
+                        break;
             }
         }
 
@@ -66,5 +75,7 @@ public class TestController {
 
         return JSON.toJSONString(testModelList);
     }
+
+
 
 }
