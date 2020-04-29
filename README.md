@@ -68,6 +68,6 @@ springboot poi 上传 excel 高效处理方式
 
 测试用例如下
 
-![](document/TIM截图20191028235440.png)
-![](document/test.xlsx)
+![Image text](https://github.com/fashionbrot/springboot-poi/blob/master/document/TIM%E6%88%AA%E5%9B%BE20191028235440.png)
+![Image text](https://github.com/fashionbrot/springboot-poi/blob/master/document/test.xlsx)
 
